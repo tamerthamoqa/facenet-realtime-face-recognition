@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image identity prediction</title>
+</head>
+
+<body>
+<h3>Upload your image for prediction:</h3>
+<form method=POST enctype=multipart/form-data action="{{ url_for('predict_image') }}">
+    <input type=file name=file>
+    <input type="submit">
+</form>
+</body>
+</html>

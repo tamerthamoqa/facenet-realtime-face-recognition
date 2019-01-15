@@ -1,0 +1,12 @@
+flask
+werkzeug
+tensorflow==1.5
+opencv-python
+numpy
+scipy
+scikit-learn
+h5py
+matplotlib
+requests
+psutil
+waitress
