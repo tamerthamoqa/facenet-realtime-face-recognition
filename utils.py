@@ -8,10 +8,51 @@ from tensorflow.python.platform import gfile
 from lib.src.facenet import get_model_filenames
 from lib.src.align import detect_face  # face detection
 from lib.src.facenet import load_img
-from scipy.misc import imresize
+from scipy.misc import imresize, imsave
 from collections import defaultdict
 from flask import flash
-from server import remove_file_extension
+
+
+def allowed_file(filename, allowed_set):
+    """Checks if filename extension is one of the allowed filename extensions for upload.
+    Args:
+        filename: filename of the uploaded file to be checked.
+        allowed_set: set containing the valid image file extensions.
+
+    Returns:
+        check: boolean value representing if the file extension is in the allowed extension list.
+                True = file is allowed
+                False = file not allowed.
+    """
+    check = '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_set
+    return check
+
+
+def remove_file_extension(filename):
+    """Returns image filename without the file extension for file storage purposes.
+    Args:
+        filename: filename of the image file.
+
+    Returns:
+          filename: filename of the image file without the file extension.
+    """
+    filename = os.path.splitext(filename)[0]
+    return filename
+
+
+def save_image(img, filename):
+    """Saves an image file to the 'uploads' folder.
+
+    Args:
+        img: image file (numpy array).
+        filename: filename of the image file.
+    """
+    try:
+        imsave(os.path.join(app.config['UPLOAD_FOLDER'], filename), arr=np.squeeze(img))
+        flash("Image saved!")
+    except Exception as e:
+        print(str(e))
+        return str(e)
 
 
 def load_model(model):

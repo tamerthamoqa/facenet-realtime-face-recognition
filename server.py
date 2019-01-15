@@ -3,61 +3,21 @@
 import cv2  # for web camera
 import tensorflow as tf
 import os
-import numpy as np
-from scipy.misc import imread, imsave
-from lib.src.align import detect_face  # face detection
-from utils import load_model, get_face, get_faces_live, embed_image, save_embedding, load_embeddings, who_is_it
-from flask import Flask, request, render_template, flash
+from scipy.misc import imread
+from lib.src.align import detect_face  # for MTCNN face detection
+from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 from waitress import serve
-
+from utils import (
+    load_model, get_face, get_faces_live, embed_image, save_embedding, load_embeddings,
+    who_is_it, allowed_file, remove_file_extension, save_image
+)
 
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])  # allowed image formats for upload
-
-
-def allowed_file(filename):
-    """Checks if filename extension is one of the allowed filename extensions for upload.
-    Args:
-        filename: filename of the uploaded file to be checked.
-
-    Returns:
-        check: boolean value representing if the file extension is in the allowed extension list.
-                True = file is allowed
-                False = file not allowed.
-    """
-    check = '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    return check
-
-
-def remove_file_extension(filename):
-    """Returns image filename without the file extension for file storage purposes.
-    Args:
-        filename: filename of the image file.
-
-    Returns:
-          filename: filename of the image file without the file extension.
-    """
-    filename = os.path.splitext(filename)[0]
-    return filename
-
-
-def save_image(img, filename):
-    """Saves an image file to the 'uploads' folder.
-
-    Args:
-        img: image file (numpy array).
-        filename: filename of the image file.
-    """
-    try:
-        imsave(os.path.join(app.config['UPLOAD_FOLDER'], filename), arr=np.squeeze(img))
-        flash("Image saved!")
-    except Exception as e:
-        print(str(e))
-        return str(e)
+allowed_set = set(['png', 'jpg', 'jpeg'])  # allowed image formats for upload
 
 
 @app.route('/upload', methods=['POST', 'GET'])
@@ -72,17 +32,15 @@ def get_image():
     if request.method == 'POST':
         # Check if the POST request has the 'file' field  or not
         if 'file' not in request.files:
-            flash('No file part')
             return "No file part"
 
         file = request.files['file']
         filename = file.filename
         # Check if user did not select any file for upload
         if filename == "":
-            flash("No selected file")
             return "No selected file"
 
-        if file and allowed_file(filename):
+        if file and allowed_file(filename, allowed_set):
             filename = secure_filename(filename)
             # Read image as numpy array
             img = imread(file)
@@ -122,14 +80,12 @@ def predict_image():
     if request.method == 'POST':
         # Check if the POST request has the 'file' field  or not
         if 'file' not in request.files:
-            flash('No file part')
             return "No file part"
 
         file = request.files['file']
         filename = file.filename
         # Check if user did not select any file for upload
         if filename == "":
-            flash("No selected file")
             return "No selected file"
 
         if file and allowed_file(filename):
@@ -234,7 +190,7 @@ if __name__ == '__main__':
     # Initiate persistent FacNet model in memory
     facenet_persistent_session = tf.Session(graph=facenet_model, config=config)
 
-    # Create Multi-Task Cascading Convolutional neural networks for Face Detection
+    # Create Multi-Task Cascading Convolutional (MTCNN) neural networks for Face Detection
     pnet, rnet, onet = detect_face.create_mtcnn(sess=facenet_persistent_session, model_path=None)
 
     # Start flask application on waitress WSGI server
