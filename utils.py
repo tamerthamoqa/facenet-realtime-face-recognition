@@ -40,15 +40,16 @@ def remove_file_extension(filename):
     return filename
 
 
-def save_image(img, filename):
+def save_image(img, filename, uploads_path):
     """Saves an image file to the 'uploads' folder.
 
     Args:
         img: image file (numpy array).
         filename: filename of the image file.
+        uploads_path: absolute path of the 'uploads/' folder.
     """
     try:
-        imsave(os.path.join(app.config['UPLOAD_FOLDER'], filename), arr=np.squeeze(img))
+        imsave(os.path.join(uploads_path, filename), arr=np.squeeze(img))
         flash("Image saved!")
     except Exception as e:
         print(str(e))
@@ -204,19 +205,19 @@ def embed_image(img, session, images_placeholder, phase_train_placeholder, embed
         return None
 
 
-def save_embedding(embedding, filename, path):
+def save_embedding(embedding, filename, embeddings_path):
     """Saves the embedding numpy file to the 'embeddings' folder.
 
     Args:
         embedding: numpy array of 128 values after the image is fed to the FaceNet model.
         filename: filename of the image file.
-        path: absolute path of the project's directory.
+        embeddings_path: absolute path of the 'embeddings/' folder.
     """
     # Save embedding of image using filename
-    embedding_path = os.path.join(path, "embeddings/" + str(filename))
+    path = os.path.join(embeddings_path, str(filename))
     try:
-        np.save(embedding_path, embedding)
-        flash("Image embedding saved!")
+        np.save(path, embedding)
+
     except Exception as e:
         print(str(e))
 
@@ -237,7 +238,7 @@ def load_embeddings():
     return embedding_dict
 
 
-def who_is_it(embedding, embedding_dict):
+def identify_face(embedding, embedding_dict):
     """Compares its received embedding with the embeddings stored in the 'embeddings' folder  by
     minimum euclidean distance (norm), the embedding with the least euclidean distance is the predicted class.
 

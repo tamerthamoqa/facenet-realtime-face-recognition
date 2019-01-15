@@ -10,13 +10,14 @@ from werkzeug.utils import secure_filename
 from waitress import serve
 from utils import (
     load_model, get_face, get_faces_live, embed_image, save_embedding, load_embeddings,
-    who_is_it, allowed_file, remove_file_extension, save_image
+    identify_face, allowed_file, remove_file_extension, save_image
 )
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+uploads_path = os.path.join(APP_ROOT, 'uploads')
+embeddings_path = os.path.join(APP_ROOT, 'embeddings')
 allowed_set = set(['png', 'jpg', 'jpeg'])  # allowed image formats for upload
 
 
@@ -40,8 +41,8 @@ def get_image():
         if filename == "":
             return "No selected file"
 
-        if file and allowed_file(filename, allowed_set):
-            filename = secure_filename(filename)
+        if file and allowed_file(filename=filename, allowed_set=allowed_set):
+            filename = secure_filename(filename=filename)
             # Read image as numpy array
             img = imread(file)
             # Detect and crop a 160 x 160 image containing the face in the image file
@@ -55,11 +56,11 @@ def get_image():
                                         phase_train_placeholder=phase_train_placeholder,
                                         image_size=image_size)
                 # Save image
-                save_image(img=img, filename=filename)
+                save_image(img=img, filename=filename, uploads_path=uploads_path)
                 # Remove file extension from image filename for numpy file storage based on image filename
                 filename = remove_file_extension(filename=filename)
                 # Save embedding to 'embeddings/' folder
-                save_embedding(embedding=embedding, filename=filename, path=APP_ROOT)
+                save_embedding(embedding=embedding, filename=filename, embeddings_path=embeddings_path)
 
                 return "Image uploaded and embedded successfully!"
 
@@ -88,7 +89,7 @@ def predict_image():
         if filename == "":
             return "No selected file"
 
-        if file and allowed_file(filename):
+        if file and allowed_file(filename=filename, allowed_set=allowed_set):
             # Read image as numpy array
             img = imread(file)
             # Detect and crop a 160 x 160 image containing the face in the image file
@@ -104,7 +105,7 @@ def predict_image():
 
                 embedding_dict = load_embeddings()
                 # Compare euclidean distance between this embedding and the embeddings stored in 'embeddings/
-                result = who_is_it(embedding=embedding, embedding_dict=embedding_dict)
+                result = identify_face(embedding=embedding, embedding_dict=embedding_dict)
 
                 return result
 
@@ -141,7 +142,7 @@ def face_detect_live():
                                                      phase_train_placeholder=phase_train_placeholder,
                                                      image_size=image_size)
 
-                        identity = who_is_it(embedding=face_embedding, embedding_dict=embedding_dict)
+                        identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
                         cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 255, 255), 2)
 
