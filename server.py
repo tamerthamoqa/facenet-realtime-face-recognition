@@ -146,7 +146,7 @@ def face_detect_live():
 
                         identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
-                        cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 255, 255), 2)
+                        cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
 
                         W = int(rect[2] - rect[0]) // 2
                         H = int(rect[3] - rect[1]) // 2
@@ -160,7 +160,7 @@ def face_detect_live():
 
         cap.release()
         cv2.destroyAllWindows()
-        return "Web Camera turned off!"
+        return render_template('index.html')
     except Exception as e:
         print(e)
 
