@@ -19,9 +19,9 @@
             <input type=file name=file class="btn btn-outline-dark">
             <input type="submit" class="btn btn-outline-dark">
         </form>
+            <br><br><br><br><br>
+        <a href="{{ url_for('predict_page') }}" class="btn btn-outline-dark">Click here for image identity prediction!</a>
             <br><br><br>
-        <a href="{{ url_for('predict_page') }}" class="btn btn-outline-dark">Click here for image prediction!</a>
-            <br><br>
         <a href="{{ url_for('face_detect_live') }}" class="btn btn-outline-dark">Click here for live facial recognition with Web Camera!</a>
     </div>
 </body>

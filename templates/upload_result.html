@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Image identity prediction</title>
+    <title>Upload Image</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -12,12 +12,7 @@
 
 <div class="container text-center">
         <br><br><br><br><br><br><br>
-    <h3>Upload your image file for identity prediction:</h3>
-        <br><br>
-    <form method=POST enctype=multipart/form-data action="{{ url_for('predict_image') }}">
-        <input type=file name=file class="btn btn-outline-dark">
-        <input type="submit" class="btn btn-outline-dark">
-    </form>
+    <p>{{ status }}</p>
         <br><br>
     <a href="{{ url_for('index_page') }}" class="btn btn-outline-dark">Back</a>
 </div>

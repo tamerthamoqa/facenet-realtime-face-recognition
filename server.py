@@ -62,10 +62,11 @@ def get_image():
                 # Save embedding to 'embeddings/' folder
                 save_embedding(embedding=embedding, filename=filename, embeddings_path=embeddings_path)
 
-                return "Image uploaded and embedded successfully!"
+                return render_template("upload_result.html", status="Image uploaded and embedded successfully!")
 
             else:
-                return "Image upload unsuccessful (no human face detected)."
+                return render_template("upload_result.html",
+                                       status="Image upload was unsuccessful! No human face was detected.")
 
     else:
         return "POST HTTP method required!"
@@ -74,9 +75,9 @@ def get_image():
 @app.route('/predictImage', methods=['POST', 'GET'])
 def predict_image():
     """Gets an image file via POST request, feeds the image to the FaceNet model, the resulting embedding is then
-    sent to be compared with the embeddings database.
+    sent to be compared with the embeddings database. The image file is not stored.
 
-    No file is stored.
+    An html page is then rendered showing the prediction result.
     """
     if request.method == 'POST':
         # Check if the POST request has the 'file' field  or not
@@ -105,12 +106,13 @@ def predict_image():
 
                 embedding_dict = load_embeddings()
                 # Compare euclidean distance between this embedding and the embeddings stored in 'embeddings/
-                result = identify_face(embedding=embedding, embedding_dict=embedding_dict)
-
-                return result
+                identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)
+                # Render output html page
+                return render_template('predict_result.html', identity=identity)
 
             else:
-                return "Operation is unsuccessful (no human face detected)."
+                return render_template('predict_result.html',
+                                       result="Operation was unsuccessful! No human face was detected.")
     else:
         return "POST HTTP method required!"
 
