@@ -33,7 +33,7 @@ If you want a scalable solution for hundreds of people or more that would need a
 
 2. Move the model file to the 'model/' folder, the path of the model should be as follows:
 
- ```'model/20170512-110547/20170512-110547.pb'```
+     ```'model/20170512-110547/20170512-110547.pb'```
 
 
 3. Run the ```server.py``` python file.
