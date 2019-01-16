@@ -2,13 +2,25 @@
 <html>
 <head>
     <title>Image identity prediction</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
 
 <body>
-<h3>Upload your image for prediction:</h3>
-<form method=POST enctype=multipart/form-data action="{{ url_for('predict_image') }}">
-    <input type=file name=file>
-    <input type="submit">
-</form>
+    <div class="vertical-center">
+        <div class="container text-center">
+                <br><br>
+            <h3>Upload your image file for identity prediction:</h3>
+                <br><br>
+            <form method=POST enctype=multipart/form-data action="{{ url_for('predict_image') }}">
+                <input type=file name=file class="btn btn-outline-dark">
+                <input type="submit" class="btn btn-outline-dark">
+            </form>
+                <br><br>
+            <a href="{{ redirect('index_page') }}" class="btn btn-outline-dark">Back</a>
+        </div>
+    </div>
 </body>
 </html>

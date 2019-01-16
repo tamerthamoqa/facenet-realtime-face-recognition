@@ -2,19 +2,27 @@
 <html>
 <head>
     <title>Upload Image</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
 
 <body>
-<h1>Server Online:</h1>
-<h3>Upload your image for storage:</h3>
-<form method=POST enctype=multipart/form-data action="{{ url_for('get_image') }}">
-    <input type=file name=file>
-    <input type="submit">
-</form>
-    <br>
-<a href="{{ url_for('predict_page') }}">Click here for image prediction!</a>
-    <br>
-    <br>
-<a href="{{ url_for('face_detect_live') }}">Click here for live facial recognition with Web Camera!</a>
+    <div class="container text-center">
+            <br><br>
+        <h1>Server Online</h1>
+            <br><br><br>
+        <h3>Upload your image file for storage and embedding:</h3>
+            <br><br>
+        <form method=POST enctype=multipart/form-data action="{{ url_for('get_image') }}">
+            <input type=file name=file class="btn btn-outline-dark">
+            <input type="submit" class="btn btn-outline-dark">
+        </form>
+            <br><br><br>
+        <a href="{{ url_for('predict_page') }}" class="btn btn-outline-dark">Click here for image prediction!</a>
+            <br><br>
+        <a href="{{ url_for('face_detect_live') }}" class="btn btn-outline-dark">Click here for live facial recognition with Web Camera!</a>
+    </div>
 </body>
 </html>
