@@ -40,9 +40,9 @@ If you want a scalable solution for hundreds of people or more that would need a
 
 4. Navigate to the url of the server (default: localhost:5000).
 
-5. Upload images of the people via the web GUI interface, an image should contain one human face, make sure to name the image file as the name of the person inside the image.
+5. Upload image files of the people via the web GUI interface (**.jpg files are recommended**, some issues may arise from .png image file dimensionality), an image should contain one human face, make sure to name the image file as the name of the person inside the image.
 
-    * **Note**: When the image file is uploaded successfully, the cropped face images will appear in the 'uploads/' folder, and the embedding files will appear in the 'embeddings/' folder.
+    * **Note**: When the image file is uploaded successfully, the cropped face images will appear in the 'uploads/' folder, and the embedding files will appear in the 'embeddings/' folder, make sure to remove the placeholder files there first.
 
 
 6. With an available web camera, click the 'Click here for live facial recognition with Web Camera!' button in the index web page, press the 'q' keyboard key to shut down the web camera when you are done.
