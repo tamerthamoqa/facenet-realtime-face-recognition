@@ -51,10 +51,12 @@ def get_image():
             # If human face is detected from get_face()
             if img is not None:
                 # Feed image to FaceNet model and return embedding
-                embedding = embed_image(img=img, session=facenet_persistent_session,
-                                        images_placeholder=images_placeholder, embeddings=embeddings,
-                                        phase_train_placeholder=phase_train_placeholder,
-                                        image_size=image_size)
+                embedding = embed_image(
+                    img=img, session=facenet_persistent_session,
+                    images_placeholder=images_placeholder, embeddings=embeddings,
+                    phase_train_placeholder=phase_train_placeholder,
+                    image_size=image_size
+                )
                 # Save image
                 save_image(img=img, filename=filename, uploads_path=uploads_path)
                 # Remove file extension from image filename for numpy file storage based on image filename
@@ -62,7 +64,8 @@ def get_image():
                 # Save embedding to 'embeddings/' folder
                 save_embedding(embedding=embedding, filename=filename, embeddings_path=embeddings_path)
 
-                return render_template("upload_result.html", status="Image uploaded and embedded successfully!")
+                return render_template("upload_result.html",
+                                       status="Image uploaded and embedded successfully!")
 
             else:
                 return render_template("upload_result.html",
@@ -99,20 +102,30 @@ def predict_image():
             # If human face is detected from get_face()
             if img is not None:
                 # Feed image to FaceNet model and return embedding
-                embedding = embed_image(img=img, session=facenet_persistent_session,
-                                        images_placeholder=images_placeholder, embeddings=embeddings,
-                                        phase_train_placeholder=phase_train_placeholder,
-                                        image_size=image_size)
+                embedding = embed_image(
+                    img=img, session=facenet_persistent_session,
+                    images_placeholder=images_placeholder, embeddings=embeddings,
+                    phase_train_placeholder=phase_train_placeholder,
+                    image_size=image_size
+                )
 
                 embedding_dict = load_embeddings()
-                # Compare euclidean distance between this embedding and the embeddings stored in 'embeddings/
-                identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)
-                # Render output html page
-                return render_template('predict_result.html', identity=identity)
+                if embedding_dict:
+                    # Compare euclidean distance between this embedding and the embeddings stored in 'embeddings/
+                    identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)
+                    # Render output html page
+                    return render_template('predict_result.html', identity=identity)
+                else:
+                    return render_template(
+                        'predict_result.html',
+                        identity="No embedding files detected! Please upload image files for embedding!"
+                    )
 
             else:
-                return render_template('predict_result.html',
-                                       result="Operation was unsuccessful! No human face was detected.")
+                return render_template(
+                    'predict_result.html',
+                    identity="Operation was unsuccessful! No human face was detected."
+                )
     else:
         return "POST HTTP method required!"
 
@@ -122,47 +135,52 @@ def face_detect_live():
     """Detects faces in real-time via Web Camera."""
 
     embedding_dict = load_embeddings()
-    try:
-        cap = cv2.VideoCapture(0)
+    if embedding_dict:
+        try:
+            cap = cv2.VideoCapture(0)
 
-        while True:
-            return_code, frame = cap.read()  # RGB frame
+            while True:
+                return_code, frame = cap.read()  # RGB frame
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
-            if frame.size > 0:
-                faces, rects = get_faces_live(img=frame, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
-                # If there are human faces detected
-                if faces:
-                    for i in range(len(faces)):
-                        face_img = faces[i]
-                        rect = rects[i]
+                if frame.size > 0:
+                    faces, rects = get_faces_live(img=frame, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
+                    # If there are human faces detected
+                    if faces:
+                        for i in range(len(faces)):
+                            face_img = faces[i]
+                            rect = rects[i]
 
-                        face_embedding = embed_image(img=face_img, session=facenet_persistent_session,
-                                                     images_placeholder=images_placeholder, embeddings=embeddings,
-                                                     phase_train_placeholder=phase_train_placeholder,
-                                                     image_size=image_size)
+                            face_embedding = embed_image(
+                                img=face_img, session=facenet_persistent_session,
+                                images_placeholder=images_placeholder, embeddings=embeddings,
+                                phase_train_placeholder=phase_train_placeholder,
+                                image_size=image_size
+                            )
 
-                        identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
+                            identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
-                        cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
+                            cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
 
-                        W = int(rect[2] - rect[0]) // 2
-                        H = int(rect[3] - rect[1]) // 2
+                            W = int(rect[2] - rect[0]) // 2
+                            H = int(rect[3] - rect[1]) // 2
 
-                        cv2.putText(frame, identity, (rect[0]+W-(W//2), rect[1]-7),
-                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 215, 0), 1, cv2.LINE_AA)
+                            cv2.putText(frame, identity, (rect[0]+W-(W//2), rect[1]-7),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 215, 0), 1, cv2.LINE_AA)
 
-                    cv2.imshow('Video', frame)
-            else:
-                continue
+                        cv2.imshow('Video', frame)
+                else:
+                    continue
 
-        cap.release()
-        cv2.destroyAllWindows()
-        return render_template('index.html')
-    except Exception as e:
-        print(e)
+            cap.release()
+            cv2.destroyAllWindows()
+            return render_template('index.html')
+        except Exception as e:
+            print(e)
+    else:
+        return "No embedding files detected! Please upload image files for embedding!"
 
 
 @app.route("/")
