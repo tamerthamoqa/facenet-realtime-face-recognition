@@ -36,7 +36,7 @@ If you want a scalable solution for hundreds of people or more that would need a
  ```'model/20170512-110547/20170512-110547.pb'```
 
 
-3. Run the server.py python file.
+3. Run the ```server.py``` python file.
 
 4. Navigate to the url of the server (default: localhost:5000).
 
