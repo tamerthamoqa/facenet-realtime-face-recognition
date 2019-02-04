@@ -30,36 +30,35 @@ def get_image():
         'embeddings' folder: for embedding numpy files.
     """
 
-    if request.method == 'POST':
-        # Check if the POST request has the 'file' field  or not
+    if request.method == 'POST':        
         if 'file' not in request.files:
             return "No file part"
 
         file = request.files['file']
         filename = file.filename
-        # Check if user did not select any file for upload
+                
         if filename == "":
             return "No selected file"
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
             filename = secure_filename(filename=filename)
-            # Read image as numpy array
+            # Read image file as numpy array
             img = imread(file)
-            # Detect and crop a 160 x 160 image containing the face in the image file
+            # Detect and crop a 160 x 160 image containing a human face in the image file
             img = get_face(img=img, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
 
-            # If human face is detected from get_face()
-            if img is not None:
-                # Feed image to FaceNet model and return embedding
+            # If a human face is detected
+            if img is not None:  
+                              
                 embedding = embed_image(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
                     phase_train_placeholder=phase_train_placeholder,
                     image_size=image_size
                 )
-                # Save image
+                # Save cropped face image to 'uploads/' folder
                 save_image(img=img, filename=filename, uploads_path=uploads_path)
-                # Remove file extension from image filename for numpy file storage based on image filename
+                # Remove file extension from image filename for numpy file storage being based on image filename
                 filename = remove_file_extension(filename=filename)
                 # Save embedding to 'embeddings/' folder
                 save_embedding(embedding=embedding, filename=filename, embeddings_path=embeddings_path)
@@ -82,26 +81,25 @@ def predict_image():
 
     An html page is then rendered showing the prediction result.
     """
-    if request.method == 'POST':
-        # Check if the POST request has the 'file' field  or not
+    if request.method == 'POST':        
         if 'file' not in request.files:
             return "No file part"
-
+            
         file = request.files['file']
-        filename = file.filename
-        # Check if user did not select any file for upload
+        filename = file.filename       
+       
         if filename == "":
             return "No selected file"
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
-            # Read image as numpy array
+            # Read image file as numpy array
             img = imread(file)
-            # Detect and crop a 160 x 160 image containing the face in the image file
+            # Detect and crop a 160 x 160 image containing a human face in the image file
             img = get_face(img=img, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
 
-            # If human face is detected from get_face()
+            # If a human face is detected
             if img is not None:
-                # Feed image to FaceNet model and return embedding
+                
                 embedding = embed_image(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
@@ -111,16 +109,16 @@ def predict_image():
 
                 embedding_dict = load_embeddings()
                 if embedding_dict:
-                    # Compare euclidean distance between this embedding and the embeddings stored in 'embeddings/
-                    identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)
-                    # Render output html page
+                    # Compare euclidean distance between this embedding and the embeddings in 'embeddings/'
+                    identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)                                     
                     return render_template('predict_result.html', identity=identity)
+                    
                 else:
                     return render_template(
                         'predict_result.html',
                         identity="No embedding files detected! Please upload image files for embedding!"
                     )
-
+                    
             else:
                 return render_template(
                     'predict_result.html',
@@ -151,15 +149,16 @@ def face_detect_live():
                     if faces:
                         for i in range(len(faces)):
                             face_img = faces[i]
-                            rect = rects[i]
-
+                            rect = rects[i]                            
+                            
                             face_embedding = embed_image(
                                 img=face_img, session=facenet_persistent_session,
                                 images_placeholder=images_placeholder, embeddings=embeddings,
                                 phase_train_placeholder=phase_train_placeholder,
                                 image_size=image_size
                             )
-
+                            
+                            # Compare euclidean distance between this embedding and the embeddings in 'embeddings/'
                             identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
                             cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
@@ -208,7 +207,7 @@ if __name__ == '__main__':
     embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")
     phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
 
-    # Initiate persistent FacNet model in memory
+    # Initiate persistent FaceNet model in memory
     facenet_persistent_session = tf.Session(graph=facenet_model, config=config)
 
     # Create Multi-Task Cascading Convolutional (MTCNN) neural networks for Face Detection

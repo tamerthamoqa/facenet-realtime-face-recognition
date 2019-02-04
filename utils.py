@@ -15,6 +15,7 @@ from flask import flash
 
 def allowed_file(filename, allowed_set):
     """Checks if filename extension is one of the allowed filename extensions for upload.
+    
     Args:
         filename: filename of the uploaded file to be checked.
         allowed_set: set containing the valid image file extensions.
@@ -30,6 +31,7 @@ def allowed_file(filename, allowed_set):
 
 def remove_file_extension(filename):
     """Returns image filename without the file extension for file storage purposes.
+    
     Args:
         filename: filename of the image file.
 
