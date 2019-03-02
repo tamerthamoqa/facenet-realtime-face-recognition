@@ -42,8 +42,8 @@ def get_image():
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
             filename = secure_filename(filename=filename)
-            # Read image file as numpy array
-            img = imread(file)
+            # Read image file as numpy array of RGB dimension
+            img = imread(name=file, mode='RGB')
             # Detect and crop a 160 x 160 image containing a human face in the image file
             img = get_face(img=img, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
 
@@ -92,8 +92,8 @@ def predict_image():
             return "No selected file"
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
-            # Read image file as numpy array
-            img = imread(file)
+            # Read image file as numpy array of RGB dimension
+            img = imread(name=file, mode='RGB')
             # Detect and crop a 160 x 160 image containing a human face in the image file
             img = get_face(img=img, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
 
