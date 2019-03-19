@@ -9,7 +9,7 @@ from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 from waitress import serve
 from utils import (
-    load_model, get_face, get_faces_live, embed_image, save_embedding, load_embeddings,
+    load_model, get_face, get_faces_live, forward_pass, save_embedding, load_embeddings,
     identify_face, allowed_file, remove_file_extension, save_image
 )
 
@@ -50,7 +50,7 @@ def get_image():
             # If a human face is detected
             if img is not None:  
                               
-                embedding = embed_image(
+                embedding = forward_pass(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
                     phase_train_placeholder=phase_train_placeholder,
@@ -100,7 +100,7 @@ def predict_image():
             # If a human face is detected
             if img is not None:
                 
-                embedding = embed_image(
+                embedding = forward_pass(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
                     phase_train_placeholder=phase_train_placeholder,
@@ -151,7 +151,7 @@ def face_detect_live():
                             face_img = faces[i]
                             rect = rects[i]                            
                             
-                            face_embedding = embed_image(
+                            face_embedding = forward_pass(
                                 img=face_img, session=facenet_persistent_session,
                                 images_placeholder=images_placeholder, embeddings=embeddings,
                                 phase_train_placeholder=phase_train_placeholder,

@@ -6,7 +6,7 @@ import glob
 import os
 from tensorflow.python.platform import gfile
 from lib.src.facenet import get_model_filenames
-from lib.src.align import detect_face  # face detection
+from lib.src.align.detect_face import detect_face  # face detection
 from lib.src.facenet import load_img
 from scipy.misc import imresize, imsave
 from collections import defaultdict
@@ -118,8 +118,10 @@ def get_face(img, pnet, rnet, onet, image_size):
     input_image_size = image_size
 
     img_size = np.asarray(img.shape)[0:2]
-    bounding_boxes, _ = detect_face.detect_face(img=img, minsize=minsize, pnet=pnet, rnet=rnet,
-                                                onet=onet, threshold=threshold, factor=factor)
+    bounding_boxes, _ = detect_face(
+        img=img, minsize=minsize, pnet=pnet, rnet=rnet,
+        onet=onet, threshold=threshold, factor=factor
+    )
 
     if not len(bounding_boxes) == 0:
         for face in bounding_boxes:
@@ -160,8 +162,10 @@ def get_faces_live(img, pnet, rnet, onet, image_size):
     faces = []
     rects = []
     img_size = np.asarray(img.shape)[0:2]
-    bounding_boxes, _ = detect_face.detect_face(img=img, minsize=minsize, pnet=pnet, rnet=rnet,
-                                                onet=onet, threshold=threshold, factor=factor)
+    bounding_boxes, _ = detect_face(
+        img=img, minsize=minsize, pnet=pnet, rnet=rnet,
+        onet=onet, threshold=threshold, factor=factor
+    )
     # If human face(s) is/are detected:
     if not len(bounding_boxes) == 0:
         for face in bounding_boxes:
@@ -180,7 +184,7 @@ def get_faces_live(img, pnet, rnet, onet, image_size):
     return faces, rects
 
 
-def embed_image(img, session, images_placeholder, phase_train_placeholder, embeddings, image_size):
+def forward_pass(img, session, images_placeholder, phase_train_placeholder, embeddings, image_size):
     """Feeds an image to the FaceNet model and returns a 128-dimension embedding for facial recognition.
 
     Args:
@@ -197,8 +201,10 @@ def embed_image(img, session, images_placeholder, phase_train_placeholder, embed
     # If there is a human face
     if img is not None:
         # Normalize the pixel values of the image for noise reduction for better accuracy and resize to desired size
-        image = load_img(img=img, do_random_crop=False, do_random_flip=False,
-                         do_prewhiten=True, image_size=image_size)
+        image = load_img(
+            img=img, do_random_crop=False, do_random_flip=False,
+            do_prewhiten=True, image_size=image_size
+        )
         # Run forward pass on FaceNet model to calculate embedding
         feed_dict = {images_placeholder: image, phase_train_placeholder: False}
         embedding = session.run(embeddings, feed_dict=feed_dict)
