@@ -4,7 +4,7 @@ A small-scale flask server facial recognition implementation, using a pre-traine
 
 * The main inspiration is from vinyakkailas's [repository](https://github.com/vinayakkailas/Face_Recognition) which is imported in the 'lib/' folder and uses David Sandberg's [facenet](https://github.com/davidsandberg/facenet) repository.
 
-* The pre-trained facenet and MTCNN models are provided by David Sandberg's repository, the pre-trained facenet model I used can be downloaded [here](https://drive.google.com/file/d/0B5MzpY9kBtDVZ2RpVDYwWmxoSUk/edit). A full list of available facenet models in that repository can be seen [here](https://github.com/davidsandberg/facenet/wiki/Training-using-the-VGGFace2-dataset) and [here](https://github.com/davidsandberg/facenet). Though please note the different specifications in each pre-trained model.
+* The pre-trained facenet and MTCNN models are provided by David Sandberg's repository, the pre-trained facenet model I used can be downloaded [here](https://drive.google.com/file/d/0B5MzpY9kBtDVZ2RpVDYwWmxoSUk/edit). A full list of available facenet models in that repository can be seen [here](https://github.com/davidsandberg/facenet/wiki/Training-using-the-VGGFace2-dataset#difference-to-previous-models) and [here](https://github.com/davidsandberg/facenet#pre-trained-models). Though please note the different specifications in each pre-trained model.
 
 &nbsp;
 
