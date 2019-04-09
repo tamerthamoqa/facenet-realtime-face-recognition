@@ -30,13 +30,13 @@ def get_image():
         'embeddings' folder: for embedding numpy files.
     """
 
-    if request.method == 'POST':        
+    if request.method == 'POST':
         if 'file' not in request.files:
             return "No file part"
 
         file = request.files['file']
         filename = file.filename
-                
+
         if filename == "":
             return "No selected file"
 
@@ -48,8 +48,8 @@ def get_image():
             img = get_face(img=img, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
 
             # If a human face is detected
-            if img is not None:  
-                              
+            if img is not None:
+
                 embedding = forward_pass(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
@@ -81,13 +81,13 @@ def predict_image():
 
     An html page is then rendered showing the prediction result.
     """
-    if request.method == 'POST':        
+    if request.method == 'POST':
         if 'file' not in request.files:
             return "No file part"
-            
+
         file = request.files['file']
-        filename = file.filename       
-       
+        filename = file.filename
+
         if filename == "":
             return "No selected file"
 
@@ -99,7 +99,7 @@ def predict_image():
 
             # If a human face is detected
             if img is not None:
-                
+
                 embedding = forward_pass(
                     img=img, session=facenet_persistent_session,
                     images_placeholder=images_placeholder, embeddings=embeddings,
@@ -110,15 +110,15 @@ def predict_image():
                 embedding_dict = load_embeddings()
                 if embedding_dict:
                     # Compare euclidean distance between this embedding and the embeddings in 'embeddings/'
-                    identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)                                     
+                    identity = identify_face(embedding=embedding, embedding_dict=embedding_dict)
                     return render_template('predict_result.html', identity=identity)
-                    
+
                 else:
                     return render_template(
                         'predict_result.html',
                         identity="No embedding files detected! Please upload image files for embedding!"
                     )
-                    
+
             else:
                 return render_template(
                     'predict_result.html',
@@ -149,15 +149,15 @@ def face_detect_live():
                     if faces:
                         for i in range(len(faces)):
                             face_img = faces[i]
-                            rect = rects[i]                            
-                            
+                            rect = rects[i]
+
                             face_embedding = forward_pass(
                                 img=face_img, session=facenet_persistent_session,
                                 images_placeholder=images_placeholder, embeddings=embeddings,
                                 phase_train_placeholder=phase_train_placeholder,
                                 image_size=image_size
                             )
-                            
+
                             # Compare euclidean distance between this embedding and the embeddings in 'embeddings/'
                             identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
@@ -170,6 +170,8 @@ def face_detect_live():
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 215, 0), 1, cv2.LINE_AA)
 
                         cv2.imshow('Video', frame)
+                    # Keep showing camera stream even if no human faces are detected
+                    cv2.imshow('Video', frame)
                 else:
                     continue
 
