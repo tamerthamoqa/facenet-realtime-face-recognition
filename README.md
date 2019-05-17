@@ -1,4 +1,4 @@
-# facenet-realtime-facial-recognition
+# facenet-realtime-face-recognition
 
 A small-scale flask server facial recognition implementation, using a pre-trained facenet model with real-time web camera face recognition functionality, and a pre-trained Multi-Task Cascading Convolutional Neural Network (MTCNN) for face detection and cropping.
 
