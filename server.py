@@ -138,6 +138,7 @@ def face_detect_live():
             cap = cv2.VideoCapture(0)
 
             while True:
+                cap.grab()  # For use in multi-camera environments when the cameras do not have hardware synchronization
                 return_code, frame = cap.read()  # RGB frame
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
