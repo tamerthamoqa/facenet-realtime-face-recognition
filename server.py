@@ -139,7 +139,10 @@ def face_detect_live():
 
             while True:
                 cap.grab()  # For use in multi-camera environments when the cameras do not have hardware synchronization
-                return_code, frame = cap.read()  # RGB frame
+                return_code, frame = cap.read()  # Read frame
+
+                # Convert the image from BGR color (which OpenCV uses) to RGB color
+                frame = frame[:, :, ::-1]
 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
