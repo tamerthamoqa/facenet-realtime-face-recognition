@@ -139,7 +139,10 @@ def face_detect_live():
 
             while True:
                 cap.grab()  # For use in multi-camera environments when the cameras do not have hardware synchronization
-                return_code, frame = cap.read()  # Read frame
+                return_code, frame_orig = cap.read()  # Read frame
+
+                # Resize frame to half its size for faster computation
+                frame = cv2.resize(frame_orig, (0, 0), fx=0.5, fy=0.5)
 
                 # Convert the image from BGR color (which OpenCV uses) to RGB color
                 frame = frame[:, :, ::-1]
@@ -149,11 +152,15 @@ def face_detect_live():
 
                 if frame.size > 0:
                     faces, rects = get_faces_live(img=frame, pnet=pnet, rnet=rnet, onet=onet, image_size=image_size)
+
                     # If there are human faces detected
                     if faces:
                         for i in range(len(faces)):
                             face_img = faces[i]
                             rect = rects[i]
+
+                            # Scale coordinates of face locations by the resize ratio
+                            rect = [coordinate * 2 for coordinate in rect]
 
                             face_embedding = forward_pass(
                                 img=face_img, session=facenet_persistent_session,
@@ -165,17 +172,17 @@ def face_detect_live():
                             # Compare euclidean distance between this embedding and the embeddings in 'embeddings/'
                             identity = identify_face(embedding=face_embedding, embedding_dict=embedding_dict)
 
-                            cv2.rectangle(frame, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
+                            cv2.rectangle(frame_orig, (rect[0], rect[1]), (rect[2], rect[3]), (255, 215, 0), 2)
 
                             W = int(rect[2] - rect[0]) // 2
                             H = int(rect[3] - rect[1]) // 2
 
-                            cv2.putText(frame, identity, (rect[0]+W-(W//2), rect[1]-7),
+                            cv2.putText(frame_orig, identity, (rect[0]+W-(W//2), rect[1]-7),
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 215, 0), 1, cv2.LINE_AA)
 
-                        cv2.imshow('Video', frame)
+                        cv2.imshow('Video', frame_orig)
                     # Keep showing camera stream even if no human faces are detected
-                    cv2.imshow('Video', frame)
+                    cv2.imshow('Video', frame_orig)
                 else:
                     continue
 
