@@ -1,0 +1,13 @@
+flask==1.0
+werkzeug==0.15.3
+tensorflow==1.12.2
+opencv-python==3.4.3.18
+numpy==1.14
+pillow==6.2.0
+scipy==1.0
+scikit-learn==0.19
+h5py==2.7
+matplotlib==2.1
+requests==2.20
+psutil==5.4.8
+waitress==1.1
