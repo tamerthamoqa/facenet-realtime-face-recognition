@@ -14,7 +14,7 @@ If you want a scalable solution for hundreds of people or more that would need a
 This implementation does not have "liveliness detection" functionality. If you present an image of a person to the web camera it would not know the difference between a real person and a picture.
 
 ## References
-* Facenet: [paper](https://arxiv.org/abs/1503.03832) - [repository](https://github.com/davidsandberg/facenet)
+* FaceNet: [paper](https://arxiv.org/abs/1503.03832) - [repository](https://github.com/davidsandberg/facenet) 
 
 
 * Multi-Task Cascading Convolutional Neural Network (MTCNN) for face detection: [paper](https://arxiv.org/abs/1604.02878) - [repository](https://github.com/kpzhang93/MTCNN_face_detection_alignment)
@@ -23,21 +23,24 @@ This implementation does not have "liveliness detection" functionality. If you p
 ## Requirements
 * Python 3.6
 
-* The pre-trained model I used requires the following:
-    * Tensorflow version 1.5
+* The list of required libraries are listed in the *requirements.txt* files, a virtualenv python environment for each running mode is highly recommended.
+
+#### Running on CPU:
+```pip3 install -r requirements_cpu.txt```
+
+#### Running using a CUDA GPU:
+* The pre-trained facial detection and recognition models I used from David Sandberg's [repository](https://github.com/davidsandberg/facenet) require the following to use CUDA-accelerated computing:
     * [CUDA](https://developer.nvidia.com/cuda-90-download-archive) Toolkit 9.0
     * [cuDNN](https://developer.nvidia.com/cudnn) 7.0
-
-
-* The rest of the required libraries are listed in the *requirements.txt* file, a virtualenv python environment for this implementation is recommended.    
-
+    * ```pip3 install -r requirements_gpu.txt```
+    * __Note__: This stackoverflow [answer](https://stackoverflow.com/questions/48428415/importerror-libcublas-so-9-0-cannot-open-shared-object-file#48429585) might help you if you are running on Ubuntu 18.04
+    
 ## Steps
 1. Download the pre-trained model [here](https://drive.google.com/file/d/0B5MzpY9kBtDVZ2RpVDYwWmxoSUk/edit).
 
 2. Move the model file to the 'model/' folder, the path of the model should be as follows:
 
      ```'model/20170512-110547/20170512-110547.pb'```
-
 
 3. Run the ```server.py``` python file.
 
@@ -46,6 +49,5 @@ This implementation does not have "liveliness detection" functionality. If you p
 5. Upload image files of the people via the web GUI interface (**.jpg image files are recommended**). An image should contain one human face, make sure to name the image file as the name of the person inside the image.
 
     * **Note**: When the image file is uploaded successfully, the cropped face images will appear in the 'uploads/' folder, and the embedding files will appear in the 'embeddings/' folder.
-
 
 6. With an available web camera, click the 'Click here for live facial recognition with Web Camera!' button in the index web page, press the 'q' keyboard key to shut down the web camera when you are done.
