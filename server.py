@@ -32,13 +32,13 @@ def get_image():
 
     if request.method == 'POST':
         if 'file' not in request.files:
-            return "No file part"
+            return render_template("warning.html", status="No 'file' field in POST request!")
 
         file = request.files['file']
         filename = file.filename
 
         if filename == "":
-            return "No selected file"
+            return render_template("warning.html", status="No selected file!")
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
             filename = secure_filename(filename=filename)
@@ -51,8 +51,10 @@ def get_image():
             if img is not None:
 
                 embedding = forward_pass(
-                    img=img, session=facenet_persistent_session,
-                    images_placeholder=images_placeholder, embeddings=embeddings,
+                    img=img,
+                    session=facenet_persistent_session,
+                    images_placeholder=images_placeholder,
+                    embeddings=embeddings,
                     phase_train_placeholder=phase_train_placeholder,
                     image_size=image_size
                 )
@@ -63,15 +65,19 @@ def get_image():
                 # Save embedding to 'embeddings/' folder
                 save_embedding(embedding=embedding, filename=filename, embeddings_path=embeddings_path)
 
-                return render_template("upload_result.html",
-                                       status="Image uploaded and embedded successfully!")
+                return render_template(
+                    "upload_result.html",
+                    status="Image uploaded and embedded successfully!"
+                )
 
             else:
-                return render_template("upload_result.html",
-                                       status="Image upload was unsuccessful! No human face was detected.")
+                return render_template(
+                    "upload_result.html",
+                    status="Image upload was unsuccessful! No human face was detected!"
+                )
 
     else:
-        return "POST HTTP method required!"
+        return render_template("warning.html", status="POST HTTP method required!")
 
 
 @app.route('/predictImage', methods=['POST', 'GET'])
@@ -83,13 +89,13 @@ def predict_image():
     """
     if request.method == 'POST':
         if 'file' not in request.files:
-            return "No file part"
+            return render_template("warning.html", status="No 'file' field in POST request!")
 
         file = request.files['file']
         filename = file.filename
 
         if filename == "":
-            return "No selected file"
+            return render_template("warning.html", status="No selected file!")
 
         if file and allowed_file(filename=filename, allowed_set=allowed_set):
             # Read image file as numpy array of RGB dimension
@@ -101,8 +107,10 @@ def predict_image():
             if img is not None:
 
                 embedding = forward_pass(
-                    img=img, session=facenet_persistent_session,
-                    images_placeholder=images_placeholder, embeddings=embeddings,
+                    img=img,
+                    session=facenet_persistent_session,
+                    images_placeholder=images_placeholder,
+                    embeddings=embeddings,
                     phase_train_placeholder=phase_train_placeholder,
                     image_size=image_size
                 )
@@ -122,10 +130,10 @@ def predict_image():
             else:
                 return render_template(
                     'predict_result.html',
-                    identity="Operation was unsuccessful! No human face was detected."
+                    identity="Operation was unsuccessful! No human face was detected!"
                 )
     else:
-        return "POST HTTP method required!"
+        return render_template("warning.html", status="POST HTTP method required!")
 
 
 @app.route("/live", methods=['GET', 'POST'])
@@ -163,8 +171,10 @@ def face_detect_live():
                             rect = [coordinate * 2 for coordinate in rect]
 
                             face_embedding = forward_pass(
-                                img=face_img, session=facenet_persistent_session,
-                                images_placeholder=images_placeholder, embeddings=embeddings,
+                                img=face_img,
+                                session=facenet_persistent_session,
+                                images_placeholder=images_placeholder,
+                                embeddings=embeddings,
                                 phase_train_placeholder=phase_train_placeholder,
                                 image_size=image_size
                             )
@@ -188,11 +198,17 @@ def face_detect_live():
 
             cap.release()
             cv2.destroyAllWindows()
+
             return render_template('index.html')
+
         except Exception as e:
             print(e)
+
     else:
-        return "No embedding files detected! Please upload image files for embedding!"
+        return render_template(
+            "warning.html",
+            status="No embedding files detected! Please upload image files for embedding!"
+        )
 
 
 @app.route("/")
