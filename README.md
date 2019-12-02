@@ -31,7 +31,7 @@ This implementation does not have "liveliness detection" functionality. If you p
 #### Running using a CUDA GPU:
 * The pre-trained facial detection and recognition models I used from David Sandberg's [repository](https://github.com/davidsandberg/facenet) require the following to use CUDA-accelerated computing:
     * [CUDA](https://developer.nvidia.com/cuda-90-download-archive) Toolkit 9.0
-    * [cuDNN](https://developer.nvidia.com/cudnn) 7.0
+    * [cuDNN](https://developer.nvidia.com/cudnn) 7.1.4
     * ```pip3 install -r requirements_gpu.txt```
     * __Note__: This stackoverflow [answer](https://stackoverflow.com/questions/48428415/importerror-libcublas-so-9-0-cannot-open-shared-object-file#48429585) might help you if you are running on Ubuntu 18.04
     
