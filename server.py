@@ -146,7 +146,6 @@ def face_detect_live():
             cap = cv2.VideoCapture(0)
 
             while True:
-                cap.grab()  # For use in multi-camera environments when the cameras do not have hardware synchronization
                 return_code, frame_orig = cap.read()  # Read frame
 
                 # Resize frame to half its size for faster computation
