@@ -2,7 +2,7 @@ flask==1.0
 werkzeug==0.15.3
 tensorflow==1.12.2
 opencv-python==3.4.3.18
-numpy==1.14
+numpy==1.16.2
 pillow==6.2.0
 scipy==1.0
 scikit-learn==0.19
