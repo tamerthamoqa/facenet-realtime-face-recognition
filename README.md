@@ -42,7 +42,9 @@ This implementation does not have "liveliness detection" functionality. If you p
 
      ```'model/20170512-110547/20170512-110547.pb'```
 
-3. Run the ```server.py``` python file.
+3. Run the server by using the ```python server.py``` command.
+
+__Note:__ Running the server (server.py) using the ```flask run``` method would cause issues, because the code that defines the CNN models exists in the 'if __ name __ == ' __ main __ ':' block, the 'flask run' method would make __ name __ not equal to ' __ main __ ' in this case and would not execute the code inside that block. If you wish to use this method, then you should move the code inside that block to the top of the code below the 'allowed_set' variable with deleting the 'serve(app=app, host='0.0.0.0', port=5000)' statement.
 
 4. Navigate to the url of the server (default: localhost:5000).
 
