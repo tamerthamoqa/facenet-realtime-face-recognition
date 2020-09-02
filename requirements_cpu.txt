@@ -11,3 +11,4 @@ matplotlib==2.1
 requests==2.20
 psutil==5.4.8
 waitress==1.1
+imutils==0.5.3
