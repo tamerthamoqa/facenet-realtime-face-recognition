@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import cv2  # for web camera
+import cv2
 import tensorflow as tf
 import os
+from imutils.video import WebcamVideoStream  # For more performant non-blocking multi-threaded OpenCV Web Camera Stream
 from scipy.misc import imread
 from lib.src.align import detect_face  # for MTCNN face detection
 from flask import Flask, request, render_template
@@ -189,17 +190,18 @@ def predict_image():
         )
 
 
-@app.route("/live", methods=['GET', 'POST'])
+@app.route("/live", methods=['GET'])
 def face_detect_live():
     """Detects faces in real-time via Web Camera."""
 
     embedding_dict = load_embeddings()
     if embedding_dict:
         try:
-            cap = cv2.VideoCapture(0)
+            # Start non-blocking multi-threaded OpenCV video stream
+            cap = WebcamVideoStream(src=0).start()
 
             while True:
-                return_code, frame_orig = cap.read()  # Read frame
+                frame_orig = cap.read()  # Read frame
 
                 # Resize frame to half its size for faster computation
                 frame = cv2.resize(src=frame_orig, dsize=(0, 0), fx=0.5, fy=0.5)
@@ -269,8 +271,8 @@ def face_detect_live():
                     cv2.imshow(winname='Video', mat=frame_orig)
                 else:
                     continue
-
-            cap.release()
+            
+            cap.stop()  # Stop multi-threaded Video Stream
             cv2.destroyAllWindows()
 
             return render_template(template_name_or_list='index.html')
