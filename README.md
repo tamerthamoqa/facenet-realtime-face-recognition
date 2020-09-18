@@ -2,9 +2,9 @@
 
 A small-scale flask server facial recognition implementation, using a pre-trained facenet model with real-time web camera face recognition functionality, and a pre-trained Multi-Task Cascading Convolutional Neural Network (MTCNN) for face detection and cropping.
 
-* The main inspiration is from vinyakkailas's [repository](https://github.com/vinayakkailas/Face_Recognition) which is imported in the 'lib/' folder and uses David Sandberg's [facenet](https://github.com/davidsandberg/facenet) repository.
+* The main inspiration is vinyakkailas's [repository](https://github.com/vinayakkailas/Face_Recognition) which uses David Sandberg's [facenet](https://github.com/davidsandberg/facenet) repository, the required dependencies from David Sandberg's 'facenet' repository were imported in the 'lib' folder and slightly cleaned.
 
-* The pre-trained facenet and MTCNN models are provided by David Sandberg's repository, the pre-trained facenet model I used can be downloaded [here](https://drive.google.com/file/d/0B5MzpY9kBtDVZ2RpVDYwWmxoSUk/edit). A full list of available facenet models in that repository can be seen [here](https://github.com/davidsandberg/facenet/wiki/Training-using-the-VGGFace2-dataset#difference-to-previous-models) and [here](https://github.com/davidsandberg/facenet#pre-trained-models). Though please note the different specifications in each pre-trained model.
+* The pre-trained facenet and MTCNN models are provided by David Sandberg's repository, the pre-trained facenet model I used can be downloaded (version 20170512-110547) [here](https://drive.google.com/file/d/0B5MzpY9kBtDVZ2RpVDYwWmxoSUk/edit) and the MTCNN model is located in the 'lib' directory in the 'mtcnn' folder. A full list of available facenet models in David Sandberg's repository can be seen [here](https://github.com/davidsandberg/facenet/wiki/Training-using-the-VGGFace2-dataset#difference-to-previous-models) and [here](https://github.com/davidsandberg/facenet#pre-trained-models). Though please note the different specifications in each pre-trained model.
 
 **Note**: This is intended as only a **small-scale** facial recognition system, that uses comparison by Euclidean Distance according to an arbitrary Euclidean Distance threshold (**1.1** in this implementation) with one stored image embedding per person. The image files would be needed to be manually uploaded via the web interface or by a mobile app that uploads image files to the address of your server ('localhost:5000/upload' in this implementation) in order to create the embedding files that use the image file's name as the identity.
 
@@ -14,10 +14,13 @@ If you want a scalable solution for hundreds of people or more that would need a
 This implementation does not have "liveliness detection" functionality. If you present an image of a person to the web camera it would not know the difference between a real person and a picture.
 
 ## References
-* FaceNet: [paper](https://arxiv.org/abs/1503.03832) - [repository](https://github.com/davidsandberg/facenet) 
+* FaceNet [paper](https://arxiv.org/abs/1503.03832).
 
+* Multi-Task Cascading Convolutional Neural Network (MTCNN) for face detection: [paper](https://arxiv.org/abs/1604.02878) - [repository](https://github.com/kpzhang93/MTCNN_face_detection_alignment).
 
-* Multi-Task Cascading Convolutional Neural Network (MTCNN) for face detection: [paper](https://arxiv.org/abs/1604.02878) - [repository](https://github.com/kpzhang93/MTCNN_face_detection_alignment)
+* David Sandberg's 'facenet' [repository](https://github.com/davidsandberg/facenet).
+
+* Vinyakkailas's [repository](https://github.com/vinayakkailas/Face_Recognition) (inspiration for the project).
 
 
 ## Requirements
