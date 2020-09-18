@@ -5,9 +5,9 @@ import numpy as np
 import glob
 import os
 from tensorflow.python.platform import gfile
-from lib.src.facenet import get_model_filenames
-from lib.src.align.detect_face import detect_face  # face detection
-from lib.src.facenet import load_img
+from lib.facenet import get_model_filenames
+from lib.mtcnn.detect_face import detect_face  # face detection
+from lib.facenet import load_image
 from scipy.misc import imresize, imsave
 from collections import defaultdict
 from flask import flash
@@ -26,6 +26,7 @@ def allowed_file(filename, allowed_set):
                 False = file not allowed.
     """
     check = '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_set
+
     return check
 
 
@@ -39,6 +40,7 @@ def remove_file_extension(filename):
           filename: filename of the image file without the file extension.
     """
     filename = os.path.splitext(filename)[0]
+
     return filename
 
 
@@ -55,6 +57,7 @@ def save_image(img, filename, uploads_path):
         flash("Image saved!")
     except Exception as e:
         print(str(e))
+
         return str(e)
 
 
@@ -91,6 +94,7 @@ def load_model(model):
 
         saver = tf.train.import_meta_graph(os.path.join(model_exp, meta_file))
         graph = saver.restore(tf.get_default_session(), os.path.join(model_exp, ckpt_file))
+
         return graph
 
 
@@ -201,7 +205,7 @@ def forward_pass(img, session, images_placeholder, phase_train_placeholder, embe
     # If there is a human face
     if img is not None:
         # Normalize the pixel values of the image for noise reduction for better accuracy and resize to desired size
-        image = load_img(
+        image = load_image(
             img=img, do_random_crop=False, do_random_flip=False,
             do_prewhiten=True, image_size=image_size
         )
@@ -277,12 +281,15 @@ def identify_face(embedding, embedding_dict):
             # remove 'embeddings/' from identity
             identity = identity[11:]
             result = "It's " + str(identity) + ", the distance is " + str(min_distance)
+
             return result
 
         else:
             result = "Not in the database, the distance is " + str(min_distance)
+
             return result
 
     except Exception as e:
         print(str(e))
+
         return str(e)

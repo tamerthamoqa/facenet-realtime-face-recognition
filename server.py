@@ -5,7 +5,7 @@ import tensorflow as tf
 import os
 from imutils.video import WebcamVideoStream  # For more performant non-blocking multi-threaded OpenCV Web Camera Stream
 from scipy.misc import imread
-from lib.src.align import detect_face  # for MTCNN face detection
+from lib.mtcnn import detect_face  # for MTCNN face detection
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 from waitress import serve
