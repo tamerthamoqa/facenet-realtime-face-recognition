@@ -49,7 +49,9 @@ This implementation does not have "liveliness detection" functionality. If you p
 
     __Note:__ Running the server (server.py) using the ```flask run``` method would cause issues, because the code that defines the CNN models exists in the 'if __ name __ == ' __ main __ ':' block, the 'flask run' method would make __ name __ not equal to ' __ main __ ' in this case and would not execute the code inside that block. If you wish to use this method, then you should move the code inside that block to the top of the code below the 'allowed_set' variable with deleting the 'serve(app=app, host='0.0.0.0', port=5000)' statement.
 
-4. Navigate to the url of the server (default: localhost:5000).
+4. Navigate to the url of the server (default: [your_host_name]:5000).
+
+    ![main_page](screenshots_safe_to_delete/1.png "main_page")
 
 5. Upload image files of the people via the web GUI interface in the main page (**.jpg image files are recommended**). An image should contain one human face, make sure to name the image file as the name of the person inside the image.
 
@@ -59,5 +61,7 @@ This implementation does not have "liveliness detection" functionality. If you p
 
     * **For image identity prediction comparison between another uploaded face image with the stored embedding(s)**: click the 'Click here for image identity prediction' button in the index web page and upload a face image for comparison.
 
+
     * **For Real-Time Face Recognition with an available web camera**: click the 'Click here for live facial recognition with Web Camera!' button in the index web page, press the 'q' keyboard key to shut down the web camera when you are done.
 
+    ![realtime_test](screenshots_safe_to_delete/2.PNG "realtime_test")
