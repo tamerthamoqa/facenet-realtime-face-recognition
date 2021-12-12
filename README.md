@@ -51,7 +51,7 @@ This implementation does not have "liveliness detection" functionality. If you p
 
 4. Navigate to the url of the server (default: [your_host_name]:5000).
 
-    ![main_page](screenshots_safe_to_delete/1.png "main_page")
+    <img src="screenshots_safe_to_delete/1.png" width="60%" height="60%">
 
 5. Upload image files of the people via the web GUI interface in the main page (**.jpg image files are recommended**). An image should contain one human face, make sure to name the image file as the name of the person inside the image.
 
@@ -64,4 +64,4 @@ This implementation does not have "liveliness detection" functionality. If you p
 
     * **For Real-Time Face Recognition with an available web camera**: click the 'Click here for live facial recognition with Web Camera!' button in the index web page, press the 'q' keyboard key to shut down the web camera when you are done.
 
-    ![realtime_test](screenshots_safe_to_delete/2.PNG "realtime_test")
+    <img src="screenshots_safe_to_delete/2.PNG" width="40%" height="40%">
