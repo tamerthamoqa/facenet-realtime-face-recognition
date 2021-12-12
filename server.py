@@ -249,7 +249,7 @@ def face_detect_live():
                                 img=frame_orig,
                                 pt1=(rect[0], rect[1]),
                                 pt2=(rect[2], rect[3]),
-                                color=(255, 215, 0),
+                                color=(0, 0, 255),  # Display Red (BGR)
                                 thickness=2
                             )
 
@@ -261,7 +261,7 @@ def face_detect_live():
                                 org=(rect[0] + W - (W // 2), rect[1]-7),
                                 fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                                 fontScale=0.5,
-                                color=(255, 215, 0),
+                                color=(0, 0, 255),  # Display Red (BGR)
                                 thickness=1,
                                 lineType=cv2.LINE_AA
                             )
