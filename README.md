@@ -63,5 +63,3 @@ This implementation does not have "liveliness detection" functionality. If you p
 
 
     * **For Real-Time Face Recognition with an available web camera**: click the 'Click here for live facial recognition with Web Camera!' button in the index web page, press the 'q' keyboard key to shut down the web camera when you are done.
-
-    <img src="screenshots_safe_to_delete/2.PNG" width="40%" height="40%">
